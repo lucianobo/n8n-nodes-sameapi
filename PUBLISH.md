@@ -25,9 +25,9 @@ Sources: [Submit community nodes](https://docs.n8n.io/integrations/creating-node
 | English only (interface, errors, docs) | Done |
 | One service per package; a Trigger for the same service is allowed (programmatic style) | Done |
 | README with install steps, usage and examples | Done (`README.md`, `USAGE.md`, `examples/`) |
-| Package source check: npm repository URL matches a public GitHub repo; author matches | **To do** (needs the real repo) |
-| **Published from GitHub Actions with a provenance statement** (required since 1 May 2026) | **To do** |
-| `npx @n8n/scan-community-package n8n-nodes-sameapi` passes | **To do** (runs on the published package) |
+| Package source check: npm repository URL matches a public GitHub repo; author matches | Done (`github.com/lucianobo/n8n-nodes-sameapi`; the scanner fetched the source from commit `61fc471`) |
+| **Published from GitHub Actions with a provenance statement** (required since 1 May 2026) | Done: 0.1.0, 10 November 2026 (run `42869475941`, SLSA provenance on npm) |
+| `npx @n8n/scan-community-package n8n-nodes-sameapi` passes | Done: provenance, source and analysis checks passed for 0.1.0 |
 | Review by n8n (Creator Portal) | **To do**; can take up to four weeks |
 
 n8n also says it may reject nodes that compete with its own paid features. That does not apply to SameAPI as far as we can tell, but the decision is n8n's.
@@ -80,6 +80,8 @@ Each step is done one at a time, together, because it happens on websites you co
 
    The tag triggers the workflow, which lints, builds and publishes to npm with provenance. Watch the run in the repository's Actions tab. (`npm run release` is the alternative for later versions: it asks for the version, rewrites the changelog from the commit history, commits, tags and pushes. It does not publish by itself.) A published version number can never be reused.
 
+   Notes from the first release (10 November 2026): the first run failed at the last step because npm needs `publishConfig.access = public` to sign a provenance statement for a new package (fixed in `package.json`; nothing had reached npm, so the tag was moved). For a short time after the publish, `npm view` showed only a placeholder version `0.0.0-stage` and no `0.1.0`; the real version appeared within a few minutes, and the placeholder stays in the version list. The scanner needs Node 22 or 24: with a newer Node it fails silently (run it in a container, for example `docker run --rm node:22-slim npx --yes @n8n/scan-community-package n8n-nodes-sameapi`).
+
 5. **Check the published package:**
 
    ```bash
@@ -105,6 +107,7 @@ Each step is done one at a time, together, because it happens on websites you co
 ## What was and was not tested
 
 - Tested: 105 automated tests; the node in n8n 2.47.3 against the live SameAPI API (usage, single lookup, batch, job status and results, errors 401, 403, 404, 429); the 402 and quota-warning paths against SameAPI's backend code run locally; the Trigger with signed and forged requests; and one real webhook delivery: a 2-domain batch on the live SameAPI service called the Trigger through a temporary public https tunnel, the signature was accepted and the workflow ran (10 November 2026, n8n 2.47.3).
+- **From npm:** 0.1.0 was installed in n8n 2.47.3 through its own community-nodes API (as Settings, Community Nodes does). Both nodes loaded, and workflows ran against the live SameAPI: usage, one domain, Include Fields and a 3-domain batch.
 - **`job.failed`:** the Trigger's event filter and the payload parser are covered by unit tests, and signed simulated requests in n8n 2.47.3 confirmed that `job.failed` is ignored by default and starts the workflow when chosen. The backend change is live (10 November 2026), but no real `job.failed` delivery has been recorded yet: it needs a job that fails with a webhook URL.
 - **Batches above 10,000 domains:** the draft, upload and start steps were run against the live service with 3 domains (completed, all successful) and the chunking is covered by tests with a fake API. A real list above 10,000 domains has not been run.
 - **Not tested:** other n8n versions, and the Google Sheets and Slack nodes in `examples/05-...` (template only).
