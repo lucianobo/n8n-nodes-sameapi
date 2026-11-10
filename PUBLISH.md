@@ -41,7 +41,7 @@ n8n also says it may reject nodes that compete with its own paid features. That 
 
 ## Before you publish (checklist)
 
-**First, deploy the SameAPI backend change that sends `job.failed`.** The README, USAGE and the Trigger's "Job Failed" choice describe an event that exists only once that change is live on sameapi.io. Do not publish the package before it is deployed.
+**The SameAPI backend change that sends `job.failed` must be live before the package is published.** The README, USAGE and the Trigger's "Job Failed" choice describe it. Status: deployed on 10 November 2026 (backend, workers, beat and scheduler restarted from 17:01 UTC; checked on the server).
 
 Run from the repository root:
 
@@ -62,29 +62,23 @@ Also check:
 
 Each step is done one at a time, together, because it happens on websites you control.
 
-1. **Create the GitHub repository** (public, MIT). The name must match `repository.url` in `package.json`. The owner and name below are placeholders:
+1. **Create the GitHub repository** (public, MIT): done, `https://github.com/lucianobo/n8n-nodes-sameapi`. The name matches `repository.url` in `package.json`. Commit messages must not contain `Co-Authored-By` lines.
+
+2. **Create an npm account** with two-factor authentication: done (user `sameapi`, security key, recovery codes saved).
+
+3. **Authorize GitHub Actions to publish.** `.github/workflows/publish.yml` runs when a version tag is pushed. npm's current documentation says the Trusted Publisher setting is in the *package's* settings, so the package must already exist: the **first** release uses a token, and the trusted publisher is set up afterwards.
+   - **First release (token).** A *granular access token* (read and write, all packages, bypass 2FA, shortest expiry) is stored as the GitHub secret `NPM_TOKEN`. The workflow writes it to the npm config before publishing, and provenance still works. Done on 10 November 2026.
+   - **After the first release (trusted publisher, no long-lived token).** On npmjs.com: the package, Settings, Trusted Publisher, GitHub Actions. Repository owner `lucianobo`, repository `n8n-nodes-sameapi`, workflow file `publish.yml`. The first publish through it must happen within 2 days of creating the setting. Then **delete the `NPM_TOKEN` secret on GitHub and revoke the token on npm.** Requires npm 11.5.1 or later and Node 22.14 or later in the workflow.
+   - Do **not** publish from your own computer if you plan to submit the node for verification: n8n requires GitHub Actions and provenance.
+
+4. **Release.** Set `version` in `package.json` and the matching `CHANGELOG.md` entry, commit and push to `main`, wait for the CI run, then push a tag with the same number:
 
    ```bash
-   git remote add origin https://github.com/lucianobo/n8n-nodes-sameapi.git
+   git tag 0.1.0
+   git push origin 0.1.0
    ```
 
-   Make the first commit and push only when you decide to. Commit messages must not contain `Co-Authored-By` lines.
-
-2. **Create an npm account** with two-factor authentication, if you do not have one.
-
-3. **Authorize GitHub Actions to publish.** The scaffold includes `.github/workflows/publish.yml`, which runs `npm run release` when a version tag is pushed. Two ways to authorize it:
-   - **Trusted publisher (preferred, no long-lived token).** On npmjs.com: your package → Settings → Trusted Publisher → GitHub Actions. Fill in repository owner, repository name and the workflow file name `publish.yml`. npm does not check these values when you save, so a typo only shows up as a failed publish. `repository.url` in `package.json` must match the GitHub repository exactly. Requires npm 11.5.1 or later and Node 22.14 or later in the workflow.
-   - **Token (fallback).** Create a *granular access token* on npmjs.com with publish permission, store it in the GitHub repository secrets as `NPM_TOKEN`. The workflow writes it to `.npmrc` before publishing and provenance still works.
-
-   > **Open question (not confirmed in the documentation we read):** the trusted publisher setting lives in the *package's* settings on npmjs.com, which suggests the package must already exist, and the docs say a new trusted publisher must complete its first successful publish within 2 days. If npm does not let you configure it before the first publish, publish version 0.1.0 with the token fallback from GitHub Actions (still with provenance), then switch to the trusted publisher. Do **not** publish 0.1.0 from your own computer if you plan to submit it for verification: n8n requires GitHub Actions + provenance.
-
-4. **Release.** Locally:
-
-   ```bash
-   npm run release
-   ```
-
-   It lints, builds, asks for the version, updates the changelog, commits, tags and pushes. The tag triggers the GitHub Actions workflow, which publishes to npm with provenance. Watch the run in the repository's Actions tab.
+   The tag triggers the workflow, which lints, builds and publishes to npm with provenance. Watch the run in the repository's Actions tab. (`npm run release` is the alternative for later versions: it asks for the version, rewrites the changelog from the commit history, commits, tags and pushes. It does not publish by itself.) A published version number can never be reused.
 
 5. **Check the published package:**
 
@@ -101,15 +95,16 @@ Each step is done one at a time, together, because it happens on websites you co
 
 7. **After approval:** update the SameAPI site and docs (see the list in the maintainer's handover) and only then use the word "verified".
 
-## Confirm before the first release
+## Decisions already made
 
 - **Author email** in `package.json`: `support@sameapi.io` (a public address already on the site).
-- **GitHub owner and repository name:** currently the placeholder `lucianobo/n8n-nodes-sameapi`.
-- **License holder** in `LICENSE`: currently "SameAPI".
+- **GitHub owner and repository name:** `lucianobo/n8n-nodes-sameapi`.
+- **License holder** in `LICENSE`: "SameAPI".
 - **Public texts:** they avoid naming other companies' trademarks.
 
 ## What was and was not tested
 
-- Tested: 79 automated tests; the node in n8n 2.47.3 against the live SameAPI API (usage, single lookup, batch, job status and results, errors 401, 403, 404, 429); the 402 and quota-warning paths against SameAPI's backend code run locally; the Trigger with signed and forged requests; and one real webhook delivery: a 2-domain batch on the live SameAPI service called the Trigger through a temporary public https tunnel, the signature was accepted and the workflow ran (10 November 2026, n8n 2.47.3).
-- **Not yet tested against the real service:** the `job.failed` event (the Trigger's event filter and the payload parser are covered by unit tests, and signed simulated requests in n8n 2.47.3 confirmed that `job.failed` is ignored by default and starts the workflow when chosen; no real `job.failed` delivery has been recorded because the backend change is not deployed yet).
-- **Not tested:** a batch of more than a few domains on the live service, other n8n versions, and the Google Sheets and Slack nodes in `examples/05-...` (template only).
+- Tested: 105 automated tests; the node in n8n 2.47.3 against the live SameAPI API (usage, single lookup, batch, job status and results, errors 401, 403, 404, 429); the 402 and quota-warning paths against SameAPI's backend code run locally; the Trigger with signed and forged requests; and one real webhook delivery: a 2-domain batch on the live SameAPI service called the Trigger through a temporary public https tunnel, the signature was accepted and the workflow ran (10 November 2026, n8n 2.47.3).
+- **`job.failed`:** the Trigger's event filter and the payload parser are covered by unit tests, and signed simulated requests in n8n 2.47.3 confirmed that `job.failed` is ignored by default and starts the workflow when chosen. The backend change is live (10 November 2026), but no real `job.failed` delivery has been recorded yet: it needs a job that fails with a webhook URL.
+- **Batches above 10,000 domains:** the draft, upload and start steps were run against the live service with 3 domains (completed, all successful) and the chunking is covered by tests with a fake API. A real list above 10,000 domains has not been run.
+- **Not tested:** other n8n versions, and the Google Sheets and Slack nodes in `examples/05-...` (template only).
