@@ -77,7 +77,7 @@ export function buildApiError(statusCode: number, body: unknown): SameApiError {
 			'SameAPI rejected the API key',
 			'auth',
 			withApiText(
-				'Check the API key in your SameAPI credential. You can create a new key in the SameAPI dashboard under API Access.',
+				'Check the API key in your SameAPI credential. You can create a new key in the SameAPI dashboard under API Keys.',
 				apiMessage,
 			),
 			statusCode,

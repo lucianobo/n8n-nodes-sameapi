@@ -111,6 +111,45 @@ export class SameApiClient {
 		);
 	}
 
+	/**
+	 * Chunked flow for a job above the size of one call (what the dashboard does):
+	 * a draft job, the domains in calls of up to 10,000, then the start. Nothing is billed
+	 * until the start (finalize).
+	 */
+	async createDraft(input: {
+		name: string;
+		webhookUrl?: string;
+		webhookSecret?: string;
+	}): Promise<Job> {
+		const body: JsonObject = { name: input.name };
+		if (input.webhookUrl) body.webhook_url = input.webhookUrl;
+		if (input.webhookSecret) body.webhook_secret = input.webhookSecret;
+		return parseJob(await this.request({ method: 'POST', path: '/jobs', body, idempotent: false }));
+	}
+
+	/** Adds domains to a draft. Safe to repeat: SameAPI ignores a domain that is already in the job. */
+	async uploadDomains(jobId: string, domains: string[]): Promise<Job> {
+		return parseJob(
+			await this.request({
+				method: 'POST',
+				path: `/jobs/${encodeURIComponent(jobId)}/domains`,
+				body: { domains },
+				idempotent: true,
+			}),
+		);
+	}
+
+	/** Starts the draft. Not repeated on server errors: a second call would answer "already started". */
+	async finalizeJob(jobId: string): Promise<Job> {
+		return parseJob(
+			await this.request({
+				method: 'POST',
+				path: `/jobs/${encodeURIComponent(jobId)}/finalize`,
+				idempotent: false,
+			}),
+		);
+	}
+
 	async getJob(jobId: string): Promise<Job> {
 		return parseJob(
 			await this.request({

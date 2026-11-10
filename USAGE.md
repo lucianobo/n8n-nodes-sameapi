@@ -16,7 +16,7 @@ If **Community Nodes** is missing, your administrator may have disabled it (envi
 
 ## 2. Create the credential
 
-1. Sign in at [sameapi.io](https://sameapi.io/?utm_source=n8n), open **API Access**, and create an API key. Copy it.
+1. Sign in at [sameapi.io](https://sameapi.io/?utm_source=n8n), open **API Keys**, and create an API key. Copy it.
 2. In n8n, open any SameAPI node and choose **Create new credential**, or go to **Credentials → Create → SameAPI API**.
 3. Paste the key into **API Key** and save.
 4. n8n tests the key. A green message means it works. If you see "Your SameAPI plan has no API access", move to a Pro plan or higher.

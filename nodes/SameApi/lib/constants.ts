@@ -19,7 +19,8 @@ export const FAILED_JOB_STATUSES: readonly string[] = [
 	'cancelled',
 ];
 
-export const MAX_DOMAINS_PER_BATCH = 10_000;
+/** One API call carries at most this many domains. A bigger job is uploaded in several calls. */
+export const MAX_DOMAINS_PER_REQUEST = 10_000;
 export const MAX_RESULTS_PER_PAGE = 1000;
 
 /** Get Domain Traffic makes one job per input item: above this, point users to Batch Lookup. */

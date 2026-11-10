@@ -26,7 +26,7 @@ export class SameApiApi implements ICredentialType {
 			default: '',
 			required: true,
 			description:
-				'Create a key in your SameAPI dashboard under API Access. API access needs a Pro plan or higher (https://sameapi.io/pricing?utm_source=n8n).',
+				'Create a key in your SameAPI dashboard under API Keys. API access needs a Pro plan or higher (https://sameapi.io/pricing?utm_source=n8n).',
 		},
 	];
 

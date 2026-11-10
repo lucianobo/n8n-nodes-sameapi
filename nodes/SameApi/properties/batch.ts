@@ -16,7 +16,7 @@ export const batchProperties: INodeProperties[] = [
 			{
 				name: 'Look Up Domains',
 				value: 'lookup',
-				description: 'Look up many domains in one job (up to 10,000)',
+				description: 'Look up many domains in one job. A long list is uploaded in several calls of 10,000 and stays one job.',
 				action: 'Look up many domains in a batch',
 			},
 		],

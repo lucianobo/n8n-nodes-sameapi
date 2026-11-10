@@ -1,5 +1,6 @@
 import type { SameApiClient } from '../lib/client';
-import { MAX_DOMAINS_PER_BATCH } from '../lib/constants';
+import { MAX_DOMAINS_PER_REQUEST } from '../lib/constants';
+import { startLargeJob } from '../lib/largeJob';
 import type { PreparedDomains } from '../lib/domain';
 import { InvalidInputError } from '../lib/errors';
 import { formatResultItem, type SimplifyGroup } from '../lib/normalize';
@@ -31,35 +32,32 @@ export interface BatchOutcome {
 	skipped: PreparedDomains['skipped'];
 }
 
-function checkSize(domains: string[]): void {
+function checkNotEmpty(domains: string[]): void {
 	if (domains.length === 0) {
 		throw new InvalidInputError(
 			'There are no valid domains to look up',
 			'Add at least one domain, or check the field that holds them.',
 		);
 	}
-	if (domains.length > MAX_DOMAINS_PER_BATCH) {
-		throw new InvalidInputError(
-			`Too many domains (${domains.length})`,
-			`One batch takes up to ${MAX_DOMAINS_PER_BATCH.toLocaleString('en-US')} domains. Split the list (for example with a Loop Over Items node) and run several batches.`,
-		);
-	}
 }
 
-/** Batch Lookup: one job for the whole list. */
+/** Batch Lookup: one job for the whole list, however long (up to what the plan allows). */
 export async function batchLookup(
 	client: SameApiClient,
 	sleep: Sleeper,
 	params: BatchParams,
 ): Promise<BatchOutcome> {
-	checkSize(params.prepared.domains);
+	checkNotEmpty(params.prepared.domains);
 
-	const started = await client.createBatch({
-		domains: params.prepared.domains,
-		name: params.name,
-		webhookUrl: params.webhookUrl,
-		webhookSecret: params.webhookSecret,
-	});
+	const started =
+		params.prepared.domains.length > MAX_DOMAINS_PER_REQUEST
+			? await startLargeJob(client, params)
+			: await client.createBatch({
+					domains: params.prepared.domains,
+					name: params.name,
+					webhookUrl: params.webhookUrl,
+					webhookSecret: params.webhookSecret,
+				});
 	if (!params.wait) return { job: started, skipped: params.prepared.skipped };
 
 	const finished = await waitForJob(client, started.id, {

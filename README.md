@@ -25,7 +25,7 @@ In short: **Settings → Community Nodes → Install**, enter `n8n-nodes-sameapi
 
 You need a SameAPI account on a **Pro plan or higher**. The Basic (free) plan has no API access.
 
-1. Sign in at [sameapi.io](https://sameapi.io/?utm_source=n8n) and open **API Access** in the dashboard.
+1. Sign in at [sameapi.io](https://sameapi.io/?utm_source=n8n) and open **API Keys** in the dashboard.
 2. Create an API key.
 3. In n8n, create a **SameAPI API** credential and paste the key.
 
@@ -38,7 +38,7 @@ n8n tests the credential with `GET /usage`. If the plan has no API access you wi
 | Resource | Operation | What it does |
 | --- | --- | --- |
 | Domain | **Get Traffic** | Looks up one domain, waits for SameAPI to finish, and returns the data. Use it for a few domains. |
-| Batch | **Look Up Domains** | Looks up up to 10,000 domains in one job. Wait for the results, or get the job ID right away (optionally with a webhook). |
+| Batch | **Look Up Domains** | Looks up a list of domains in one job. The size is limited by your plan, not by the node: a list above 10,000 domains is uploaded in several calls of up to 10,000 and stays one job. Wait for the results, or get the job ID right away (optionally with a webhook). |
 | Job | **Get** | Returns the status and progress of a job. |
 | Job | **Get Results** | Returns the results of a job, with **Return All** or a **Limit**. |
 | Account | **Get Usage** | Returns your plan, monthly quota and rate limits. |

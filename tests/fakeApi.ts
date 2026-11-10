@@ -12,6 +12,10 @@ export interface FakeOptions {
 	/** Domains that fail inside the job. */
 	failingDomains?: string[];
 	finalStatus?: string;
+	/** Answer this status once to the next call whose "METHOD path" matches, then behave normally. */
+	failOnce?: Array<{ match: RegExp; statusCode: number; body?: unknown }>;
+	/** Maximum domains one upload call accepts (the real API: 10,000). */
+	maxPerUpload?: number;
 }
 
 export interface FakeApi {
@@ -24,7 +28,8 @@ const ok = (body: unknown, statusCode = 200): HttpResponse => ({ statusCode, hea
 export function createFakeApi(options: FakeOptions = {}): FakeApi {
 	const calls: RequestSpec[] = [];
 	const scripted = [...(options.scriptedStatuses ?? [])];
-	const jobs = new Map<string, { domains: string[]; polls: number }>();
+	const failOnce = [...(options.failOnce ?? [])];
+	const jobs = new Map<string, { domains: string[]; polls: number; draft?: boolean }>();
 	let counter = 0;
 
 	const jobBody = (id: string, status: string): JsonObject => {
@@ -49,6 +54,11 @@ export function createFakeApi(options: FakeOptions = {}): FakeApi {
 
 	const requester = async (spec: RequestSpec): Promise<HttpResponse> => {
 		calls.push(spec);
+		const failIndex = failOnce.findIndex((f) => f.match.test(`${spec.method} ${spec.path}`));
+		if (failIndex >= 0) {
+			const [fail] = failOnce.splice(failIndex, 1);
+			return { statusCode: fail.statusCode, headers: {}, body: fail.body ?? {} };
+		}
 		const next = scripted.shift();
 		if (next) return { statusCode: next.statusCode, headers: next.headers ?? {}, body: next.body ?? {} };
 
@@ -58,6 +68,32 @@ export function createFakeApi(options: FakeOptions = {}): FakeApi {
 				quota: { monthly_limit: 10000, used: 10, remaining: 9990 },
 				rate_limits: { requests_per_second: 10, concurrent_jobs: 5, max_inflight: 50 },
 			});
+		}
+		// Chunked flow: POST /jobs (draft), POST /jobs/{id}/domains, POST /jobs/{id}/finalize
+		if (spec.method === 'POST' && spec.path === '/jobs') {
+			const id = `job-${(counter += 1)}`;
+			jobs.set(id, { domains: [], polls: 0, draft: true });
+			return ok(jobBody(id, 'draft'), 201);
+		}
+		const uploadMatch = /^\/jobs\/([^/]+)\/domains$/.exec(spec.path);
+		if (spec.method === 'POST' && uploadMatch) {
+			const job = jobs.get(uploadMatch[1]);
+			if (!job) return { statusCode: 404, headers: {}, body: { message: 'Job not found' } };
+			if (!job.draft) return { statusCode: 409, headers: {}, body: { message: 'Job is not in draft state' } };
+			const chunk = (spec.body?.domains as string[]) ?? [];
+			if (chunk.length > (options.maxPerUpload ?? 10_000)) {
+				return { statusCode: 400, headers: {}, body: { message: 'Max 10,000 domains per request.' } };
+			}
+			job.domains.push(...chunk.filter((d) => !job.domains.includes(d)));
+			return ok(jobBody(uploadMatch[1], 'draft'));
+		}
+		const finalizeMatch = /^\/jobs\/([^/]+)\/finalize$/.exec(spec.path);
+		if (spec.method === 'POST' && finalizeMatch) {
+			const job = jobs.get(finalizeMatch[1]);
+			if (!job) return { statusCode: 404, headers: {}, body: { message: 'Job not found' } };
+			if (!job.draft) return { statusCode: 409, headers: {}, body: { message: 'Job is not in draft state (already finalized).' } };
+			job.draft = false;
+			return ok(jobBody(finalizeMatch[1], 'pending'));
 		}
 		if (spec.path.startsWith('/lookup/batch')) {
 			const domains = (spec.body?.domains as string[]) ?? [];

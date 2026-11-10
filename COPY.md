@@ -17,7 +17,7 @@ Website traffic, rankings and AI visits for any domain, inside n8n
 ## 2. Short description (about 160 characters)
 
 ```
-Get estimated monthly visits, rankings, traffic sources and AI-assistant visits for any domain. One domain or 10,000 in a batch, with no job handling.
+Get estimated monthly visits, rankings, traffic sources and AI-assistant visits for any domain. One domain or a whole list in a batch, with no job handling.
 ```
 
 ## 3. Long description (for a directory page)
@@ -25,7 +25,7 @@ Get estimated monthly visits, rankings, traffic sources and AI-assistant visits 
 ```
 SameAPI adds website traffic data to your n8n workflows. Give it a domain and it returns the estimated monthly visits, global, country and category rankings, the share of traffic by source, the top countries, the top search keywords, engagement figures and the estimated visits that come from AI assistants such as ChatGPT or Gemini.
 
-The lookup runs as a job on SameAPI's side, but you do not have to manage it: "Get Traffic" starts the lookup, waits for it, and hands you the data. For longer lists, "Look Up Domains" sends up to 10,000 domains in one batch and either waits for the results or returns a job ID so the workflow can carry on when the job is finished (with the SameAPI Trigger and a signed webhook, which also reports a job that failed).
+The lookup runs as a job on SameAPI's side, but you do not have to manage it: "Get Traffic" starts the lookup, waits for it, and hands you the data. For longer lists, "Look Up Domains" sends the whole list as one job (what you can send depends on your plan) and either waits for the results or returns a job ID so the workflow can carry on when the job is finished (with the SameAPI Trigger and a signed webhook, which also reports a job that failed).
 
 Results can be simplified into one flat item per domain with clear units (percentages are always 0 to 100), or returned in full. Errors are explained in plain English, rate limits are respected, and "Continue on Fail" is supported.
 
@@ -44,7 +44,7 @@ An API key from a SameAPI Pro plan or higher is required. The free Basic plan ha
 - Estimated visits from AI assistants, with a ranking of the assistants
 - Engagement: bounce rate, pages per visit, average visit duration
 - Automatic waiting: no job handling for single lookups
-- Batch of up to 10,000 domains, with optional webhook and a signed-webhook Trigger node
+- Batch of any size your plan allows (long lists are uploaded in calls of 10,000), with optional webhook and a signed-webhook Trigger node
 - "Return All" and "Limit" for results, read page by page
 - Domains are cleaned and de-duplicated (`https://www.Example.com/page` becomes `example.com`)
 - Polling interval and timeout settings
@@ -64,7 +64,7 @@ An API key from a SameAPI Pro plan or higher is required. The free Basic plan ha
 
 - n8n with community nodes enabled (developed and tested on n8n 2.47.3)
 - A SameAPI account on a **Pro plan or higher** (Basic has no API access)
-- An API key from the SameAPI dashboard (API Access)
+- An API key from the SameAPI dashboard (API Keys)
 
 ## 7. Keywords and categories
 
@@ -79,7 +79,7 @@ An API key from a SameAPI Pro plan or higher is required. The free Basic plan ha
 Label: **API Key**
 
 ```
-Create a key in your SameAPI dashboard under API Access. API access needs a Pro plan or higher (https://sameapi.io/pricing?utm_source=n8n).
+Create a key in your SameAPI dashboard under API Keys. API access needs a Pro plan or higher (https://sameapi.io/pricing?utm_source=n8n).
 ```
 
 ## 9. Operations and fields
@@ -103,7 +103,7 @@ Create a key in your SameAPI dashboard under API Access. API access needs a Pro 
 ### Resource: Batch
 
 **Operation: Look Up Domains**
-- Description: Look up many domains in one job (up to 10,000)
+- Description: Look up many domains in one job. A long list is uploaded in several calls of 10,000 and stays one job.
 - Action: Look up many domains in a batch
 - **Domains From**: *Each Input Item* (read one domain from every incoming item) or *Pasted List* (commas, spaces or new lines)
 - **Domain**: The domain of each input item. Map the field that holds it. Placeholder: `e.g. {{ $json.domain }}`
@@ -137,7 +137,7 @@ Each error has a short message and a longer explanation in the node.
 
 | Situation | Message | Explanation (summary) |
 | --- | --- | --- |
-| HTTP 401 | SameAPI rejected the API key | Check the API key in your SameAPI credential; create a new one under API Access. |
+| HTTP 401 | SameAPI rejected the API key | Check the API key in your SameAPI credential; create a new one under API Keys. |
 | HTTP 402 | SameAPI quota used up or payment overdue | The monthly quota is used up or a renewal payment failed. Upgrade or turn on overage: https://sameapi.io/pricing?utm_source=n8n |
 | HTTP 403, no API | Your SameAPI plan has no API access | This node needs a Pro plan or higher. See https://sameapi.io/pricing?utm_source=n8n |
 | HTTP 403, other | SameAPI refused the request | Check that your email address is verified and that your plan includes API access. |
@@ -149,7 +149,6 @@ Each error has a short message and a longer explanation in the node.
 | Job failed | The SameAPI job failed / was canceled | Nothing was returned. Try again; contact support if it repeats. |
 | Partial results | SameAPI returned only part of the results | The server had a problem while sending results. Run the node again. |
 | Bad input | "..." is not a valid domain | Use a domain name such as example.com. IP addresses and single words are not supported. |
-| Bad input | Too many domains (N) | One batch takes up to 10,000 domains. Split the list. |
 | Bad input | There are no valid domains to look up | Add at least one domain, or check the field that holds them. |
 | Bad input | Too many items for Get Traffic (N) | Use Batch → Look Up Domains, or turn on "Allow More Than 50 Items". |
 | Domain refused | SameAPI rejected this domain as invalid | Returned inside batch results as `success: false` with `details` holding the original text. |

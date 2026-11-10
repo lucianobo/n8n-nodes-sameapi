@@ -97,7 +97,7 @@ Each step is done one at a time, together, because it happens on websites you co
 
 6. **Submit for verification** at the [n8n Creator Portal](https://creators.n8n.io/nodes): sign in or sign up, submit the package, and answer n8n's emails. n8n fetches the package from npm for its checks.
 
-   **If n8n asks for a way to test the node:** the Basic plan has no API access, so give the reviewers an API key from a paid account (the owner decided to use the `me@lucianobonanno.com` account, which is on a paid plan). Send it only through the channel n8n asks for, never put it in the repository, and revoke it in the SameAPI dashboard (API Access) once the review is finished.
+   **If n8n asks for a way to test the node:** the Basic plan has no API access, so give the reviewers an API key from a paid account (the owner decided to use the `me@lucianobonanno.com` account, which is on a paid plan). Send it only through the channel n8n asks for, never put it in the repository, and revoke it in the SameAPI dashboard (API Keys) once the review is finished.
 
 7. **After approval:** update the SameAPI site and docs (see the list in the maintainer's handover) and only then use the word "verified".
 
