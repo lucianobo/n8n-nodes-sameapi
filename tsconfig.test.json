@@ -1,0 +1,13 @@
+{
+	"extends": "./tsconfig.json",
+	"compilerOptions": {
+		"outDir": "./.test-build",
+		"rootDir": ".",
+		"incremental": false,
+		"declaration": false,
+		"sourceMap": false,
+		"types": ["node"],
+		"lib": ["es2022"]
+	},
+	"include": ["tests/**/*.ts", "nodes/SameApi/lib/**/*.ts", "nodes/SameApi/operations/**/*.ts"]
+}

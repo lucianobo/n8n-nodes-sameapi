@@ -1,0 +1,60 @@
+{
+	"name": "n8n-nodes-sameapi",
+	"version": "0.1.0",
+	"description": "n8n community node for SameAPI: website traffic, rankings and AI-assistant visits for any domain.",
+	"license": "MIT",
+	"homepage": "https://sameapi.io/?utm_source=n8n",
+	"keywords": [
+		"n8n-community-node-package",
+		"n8n",
+		"sameapi",
+		"website traffic",
+		"traffic estimates",
+		"domain analysis",
+		"seo"
+	],
+	"author": {
+		"name": "SameAPI",
+		"email": "support@sameapi.io",
+		"url": "https://sameapi.io/?utm_source=n8n"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/lucianobo/n8n-nodes-sameapi.git"
+	},
+	"scripts": {
+		"build": "n8n-node build",
+		"build:watch": "tsc --watch",
+		"dev": "n8n-node dev",
+		"lint": "n8n-node lint",
+		"lint:fix": "n8n-node lint --fix",
+		"test": "tsc -p tsconfig.test.json && node --test '.test-build/tests/*.test.js'",
+		"release": "n8n-node release",
+		"prepublishOnly": "n8n-node prerelease"
+	},
+	"files": [
+		"dist"
+	],
+	"n8n": {
+		"n8nNodesApiVersion": 1,
+		"strict": true,
+		"credentials": [
+			"dist/credentials/SameApiApi.credentials.js"
+		],
+		"nodes": [
+			"dist/nodes/SameApi/SameApi.node.js",
+			"dist/nodes/SameApiTrigger/SameApiTrigger.node.js"
+		]
+	},
+	"devDependencies": {
+		"@n8n/node-cli": "*",
+		"@types/node": "^24.0.0",
+		"eslint": "9.32.0",
+		"prettier": "3.6.2",
+		"release-it": "^21.1.0",
+		"typescript": "5.9.2"
+	},
+	"peerDependencies": {
+		"n8n-workflow": "*"
+	}
+}

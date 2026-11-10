@@ -1,0 +1,72 @@
+{
+  "name": "SameAPI - batch with webhook (2 of 2: receive and fetch results)",
+  "nodes": [
+    {
+      "id": "6bd87da8-2ffc-4d61-aeab-fccf4c2afdf4",
+      "name": "SameAPI Trigger",
+      "type": "n8n-nodes-sameapi.sameApiTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "parameters": {
+        "webhookSecret": "PASTE the same secret here"
+      },
+      "webhookId": "c560967c-22d6-4036-93c1-754ce9c6a202"
+    },
+    {
+      "id": "03d5a17d-cca3-4ccb-b046-1533a0bd4cf0",
+      "name": "Get Results",
+      "type": "n8n-nodes-sameapi.sameApi",
+      "typeVersion": 1,
+      "position": [
+        220,
+        0
+      ],
+      "parameters": {
+        "resource": "job",
+        "operation": "getResults",
+        "jobId": "={{ $json.jobId }}",
+        "simplify": true,
+        "returnAll": true
+      }
+    },
+    {
+      "id": "ee7fa80e-4877-419a-8c0c-16bc1b9a6033",
+      "name": "Your next step",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        440,
+        0
+      ],
+      "parameters": {}
+    }
+  ],
+  "connections": {
+    "SameAPI Trigger": {
+      "main": [
+        [
+          {
+            "node": "Get Results",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Results": {
+      "main": [
+        [
+          {
+            "node": "Your next step",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {}
+}

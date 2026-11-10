@@ -1,0 +1,162 @@
+{
+  "name": "SameAPI - Google Sheets domains to traffic report in Slack (template)",
+  "nodes": [
+    {
+      "id": "6a656420-3382-4f3a-a899-aeab2ff6f316",
+      "name": "Start",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "6e029331-42f6-432f-a55f-c492f524dfa5",
+      "name": "Read domains",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        220,
+        0
+      ],
+      "parameters": {
+        "operation": "read",
+        "documentId": {
+          "__rl": true,
+          "mode": "list",
+          "value": ""
+        },
+        "sheetName": {
+          "__rl": true,
+          "mode": "list",
+          "value": ""
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "7bf62e22-8f43-4373-b8ce-ac5b87c9da53",
+      "name": "Batch Lookup",
+      "type": "n8n-nodes-sameapi.sameApi",
+      "typeVersion": 1,
+      "position": [
+        440,
+        0
+      ],
+      "parameters": {
+        "resource": "batch",
+        "operation": "lookup",
+        "domainSource": "items",
+        "domain": "={{ $json.domain }}",
+        "resultMode": "wait",
+        "simplify": true,
+        "returnAll": true,
+        "options": {
+          "skipInvalidDomains": true
+        }
+      }
+    },
+    {
+      "id": "2b348110-0df2-4ed8-baf1-35527ec52310",
+      "name": "Only big sites",
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.2,
+      "position": [
+        660,
+        0
+      ],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "typeValidation": "loose"
+          },
+          "conditions": [
+            {
+              "id": "c1",
+              "leftValue": "={{ $json.visits.estimatedMonthlyVisits }}",
+              "rightValue": 100000,
+              "operator": {
+                "type": "number",
+                "operation": "gte"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "67da8987-6eaf-4868-bcf9-f26174897986",
+      "name": "Post to Slack",
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.3,
+      "position": [
+        880,
+        0
+      ],
+      "parameters": {
+        "resource": "message",
+        "operation": "post",
+        "select": "channel",
+        "channelId": {
+          "__rl": true,
+          "mode": "list",
+          "value": ""
+        },
+        "text": "={{ $json.domain }}: {{ $json.visits.estimatedMonthlyVisits }} visits last month, global rank {{ $json.ranks.global }}",
+        "otherOptions": {}
+      }
+    }
+  ],
+  "connections": {
+    "Start": {
+      "main": [
+        [
+          {
+            "node": "Read domains",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read domains": {
+      "main": [
+        [
+          {
+            "node": "Batch Lookup",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Batch Lookup": {
+      "main": [
+        [
+          {
+            "node": "Only big sites",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Only big sites": {
+      "main": [
+        [
+          {
+            "node": "Post to Slack",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {}
+}

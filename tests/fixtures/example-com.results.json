@@ -1,0 +1,292 @@
+{
+ "items": [
+  {
+   "id": "43654fc5-e8e5-4307-8656-1a9f4917ffea",
+   "domain": "example.com",
+   "success": true,
+   "title": "example.com",
+   "country": "",
+   "raw_data": {
+    "Version": 1,
+    "SiteName": "example.com",
+    "Description": "",
+    "TopCountryShares": [
+     {
+      "Country": 840,
+      "CountryCode": "US",
+      "Value": 0.1488295405072624
+     },
+     {
+      "Country": 356,
+      "CountryCode": "IN",
+      "Value": 0.10671323842804373
+     },
+     {
+      "Country": 156,
+      "CountryCode": "CN",
+      "Value": 0.07164423517474328
+     },
+     {
+      "Country": 392,
+      "CountryCode": "JP",
+      "Value": 0.06505663715558442
+     },
+     {
+      "Country": 276,
+      "CountryCode": "DE",
+      "Value": 0.03363415953384328
+     }
+    ],
+    "Title": "Example Domain",
+    "Engagments": {
+     "BounceRate": "0.6940160895131248",
+     "Month": "10",
+     "Year": "2026",
+     "PagePerVisit": "1.8996806330412916",
+     "Visits": "7991641",
+     "TimeOnSite": "174.13309874133554"
+    },
+    "EstimatedMonthlyVisits": {
+     "2026-08-01": 9345666,
+     "2026-09-01": 7730649,
+     "2026-10-01": 7991641
+    },
+    "GlobalRank": {
+     "Rank": 9425
+    },
+    "CountryRank": {
+     "Country": 840,
+     "CountryCode": "US",
+     "Rank": 13112
+    },
+    "CategoryRank": {
+     "Rank": "310",
+     "Category": "Computers_Electronics_and_Technology/Programming_and_Developer_Software"
+    },
+    "GlobalCategoryRank": null,
+    "IsSmall": false,
+    "Policy": 0,
+    "TrafficSources": {
+     "SocialOrganic": 0.010840843121614631,
+     "SocialPaid": 0.0005860504697258037,
+     "Mail": 0.008360412123366568,
+     "Referrals": 0.08582550331898797,
+     "SearchOrganic": 0.03602281429256248,
+     "SearchPaid": 0.00017758763226844747,
+     "Direct": 0.5203220594057734,
+     "GenAi": 0.004771022979437476,
+     "Affiliate": 0.00036113407150464643,
+     "DisplayAds": 0.3327325725847586
+    },
+    "Category": "computers_electronics_and_technology/programming_and_developer_software",
+    "LargeScreenshot": "https://site-images.similarcdn.com/image?url=example.com&t=1&s=1&h=b63fbdb6c1a27c3f1467398b04fb81fcac694d85223c8a8eb2ca7c3e276b4af8",
+    "IsDataFromGa": false,
+    "Competitors": {
+     "TopSimilarityCompetitors": []
+    },
+    "Notification": {
+     "Content": null
+    },
+    "TopKeywords": [
+     {
+      "Name": "example.com",
+      "EstimatedValue": 2190,
+      "Volume": 2810,
+      "Cpc": 1.83
+     },
+     {
+      "Name": "example",
+      "EstimatedValue": 1190,
+      "Volume": 44220,
+      "Cpc": 0.1
+     },
+     {
+      "Name": "how to open captive portal of my wifi",
+      "EstimatedValue": 600,
+      "Volume": 150,
+      "Cpc": null
+     },
+     {
+      "Name": "example domain",
+      "EstimatedValue": 560,
+      "Volume": 790,
+      "Cpc": null
+     },
+     {
+      "Name": "browser consol postmessage sample hello world",
+      "EstimatedValue": 540,
+      "Volume": 630,
+      "Cpc": null
+     }
+    ],
+    "AiTrafficDetails": {
+     "Traffic": {
+      "Split": [
+       {
+        "Name": "gemini.google.com",
+        "Rank": 1,
+        "Icon": "/image?url=gemini.google.com&t=2&s=1&h=ec0ae7eb3432025135e3658db1edf54cfa2710c74ca7f113d026db33002def01"
+       },
+       {
+        "Name": "chatgpt.com",
+        "Rank": 2,
+        "Icon": "/image?url=chatgpt.com&t=2&s=1&h=a31616ae3cdef12fcfc664127563e6092e7531e7b4c3cde7e0c8c5fd3310dfc0"
+       },
+       {
+        "Name": "chat.deepseek.com",
+        "Rank": 3,
+        "Icon": "/image?url=chat.deepseek.com&t=2&s=1&h=3932bcfb7ad820bd114ee43a2dba828a589d2ff19b6dc54400e0d39b2d65d377"
+       },
+       {
+        "Name": "perplexity.ai",
+        "Rank": 4,
+        "Icon": "/image?url=perplexity.ai&t=2&s=1&h=f48fa93e79e65eef47bff5b62e7037bccffb0629aecaed2d0c9f2fb25f177362"
+       },
+       {
+        "Name": "claude.ai",
+        "Rank": 5,
+        "Icon": "/image?url=claude.ai&t=2&s=1&h=a3b3778e02952b653132fb6d019ed0361cff7850429377787fbdc4c86ce1565e"
+       }
+      ],
+      "Distribution": {
+       "Boundary": "<100K",
+       "Chart": [
+        {
+         "Name": "gemini.google.com",
+         "Icon": "/image?url=gemini.google.com&t=2&s=1&h=ec0ae7eb3432025135e3658db1edf54cfa2710c74ca7f113d026db33002def01",
+         "History": [
+          {
+           "Date": "2026-10-01",
+           "Value": 25.72622638262071
+          },
+          {
+           "Date": "2026-09-01",
+           "Value": 14.753354985062442
+          },
+          {
+           "Date": "2026-08-01",
+           "Value": 22.577389527300266
+          }
+         ]
+        },
+        {
+         "Name": "chatgpt.com",
+         "Icon": "/image?url=chatgpt.com&t=2&s=1&h=a31616ae3cdef12fcfc664127563e6092e7531e7b4c3cde7e0c8c5fd3310dfc0",
+         "History": [
+          {
+           "Date": "2026-10-01",
+           "Value": 21.23154546509884
+          },
+          {
+           "Date": "2026-09-01",
+           "Value": 54.70789061118755
+          },
+          {
+           "Date": "2026-08-01",
+           "Value": 72.77613073171592
+          }
+         ]
+        },
+        {
+         "Name": "chat.deepseek.com",
+         "Icon": "/image?url=chat.deepseek.com&t=2&s=1&h=3932bcfb7ad820bd114ee43a2dba828a589d2ff19b6dc54400e0d39b2d65d377",
+         "History": [
+          {
+           "Date": "2026-10-01",
+           "Value": 3.2982695100713486
+          },
+          {
+           "Date": "2026-09-01",
+           "Value": 0
+          },
+          {
+           "Date": "2026-08-01",
+           "Value": 0
+          }
+         ]
+        }
+       ],
+       "Chatbots": [
+        {
+         "Name": "gemini.google.com",
+         "Icon": "/image?url=gemini.google.com&t=2&s=1&h=ec0ae7eb3432025135e3658db1edf54cfa2710c74ca7f113d026db33002def01",
+         "Value": 25.72622638262071
+        },
+        {
+         "Name": "chatgpt.com",
+         "Icon": "/image?url=chatgpt.com&t=2&s=1&h=a31616ae3cdef12fcfc664127563e6092e7531e7b4c3cde7e0c8c5fd3310dfc0",
+         "Value": 21.23154546509884
+        },
+        {
+         "Name": "chat.deepseek.com",
+         "Icon": "/image?url=chat.deepseek.com&t=2&s=1&h=3932bcfb7ad820bd114ee43a2dba828a589d2ff19b6dc54400e0d39b2d65d377",
+         "Value": 3.2982695100713486
+        }
+       ]
+      }
+     },
+     "TotalVisits": 17329.183,
+     "ReferralTraffic": 0.0021930377983701886,
+     "TopPrompts": {
+      "Status": 2,
+      "ErrorMessage": "Site is not allowed for Top Prompts",
+      "Prompts": []
+     }
+    },
+    "SnapshotDate": "2026-10-01T00:00:00+00:00",
+    "global_rank": 9425,
+    "country_rank": 13112,
+    "country": "US",
+    "category_rank": "310",
+    "category": "Computers_Electronics_and_Technology/Programming_and_Developer_Software",
+    "title": "example.com",
+    "bounce_rate": 69.40160895131248,
+    "pages_per_visit": 1.8996806330412916,
+    "avg_visit_duration": 174.13309874133554,
+    "total_visits": 7991641.0,
+    "visits": {
+     "2026-08-01": 9345666,
+     "2026-09-01": 7730649,
+     "2026-10-01": 7991641
+    },
+    "top_countries": [
+     {
+      "country": "US",
+      "percentage": 14.88295405072624
+     },
+     {
+      "country": "IN",
+      "percentage": 10.671323842804373
+     },
+     {
+      "country": "CN",
+      "percentage": 7.164423517474328
+     },
+     {
+      "country": "JP",
+      "percentage": 6.505663715558442
+     },
+     {
+      "country": "DE",
+      "percentage": 3.3634159533843278
+     }
+    ],
+    "traffic_sources": {
+     "socialorganic": 1.0840843121614632,
+     "socialpaid": 0.05860504697258037,
+     "email": 0.8360412123366568,
+     "referral": 8.582550331898798,
+     "searchorganic": 3.602281429256248,
+     "searchpaid": 0.017758763226844748,
+     "direct": 52.032205940577335,
+     "genai": 0.47710229794374764,
+     "affiliate": 0.03611340715046464,
+     "displayads": 33.27325725847586
+    }
+   },
+   "error_message": null,
+   "processed_at": "2026-11-10T12:45:23.466717+00:00"
+  }
+ ],
+ "total": 1
+}

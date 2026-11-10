@@ -1,0 +1,18 @@
+{
+	"node": "n8n-nodes-sameapi.sameApi",
+	"nodeVersion": "1.0",
+	"codexVersion": "1.0",
+	"categories": ["Analytics", "Marketing & Content"],
+	"resources": {
+		"credentialDocumentation": [
+			{
+				"url": "https://sameapi.io/docs?utm_source=n8n"
+			}
+		],
+		"primaryDocumentation": [
+			{
+				"url": "https://sameapi.io/docs?utm_source=n8n"
+			}
+		]
+	}
+}

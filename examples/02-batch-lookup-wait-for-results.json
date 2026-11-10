@@ -1,0 +1,77 @@
+{
+  "name": "SameAPI - batch lookup and wait for results",
+  "nodes": [
+    {
+      "id": "e89dc047-5259-4496-8fa4-ea9efcfaf8d1",
+      "name": "Start",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "5e0dcf26-14a0-4450-8f3c-89a85f221919",
+      "name": "Domains",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        220,
+        0
+      ],
+      "parameters": {
+        "jsCode": "return ['example.com', 'github.com', 'wikipedia.org'].map((domain) => ({ json: { domain } }));"
+      }
+    },
+    {
+      "id": "f618433d-bff9-49b9-a126-5be0e4c18099",
+      "name": "Batch Lookup",
+      "type": "n8n-nodes-sameapi.sameApi",
+      "typeVersion": 1,
+      "position": [
+        440,
+        0
+      ],
+      "parameters": {
+        "resource": "batch",
+        "operation": "lookup",
+        "domainSource": "items",
+        "domain": "={{ $json.domain }}",
+        "resultMode": "wait",
+        "simplify": true,
+        "returnAll": true,
+        "options": {
+          "batchName": "n8n example",
+          "skipInvalidDomains": true
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Start": {
+      "main": [
+        [
+          {
+            "node": "Domains",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Domains": {
+      "main": [
+        [
+          {
+            "node": "Batch Lookup",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {}
+}

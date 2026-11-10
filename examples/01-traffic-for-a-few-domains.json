@@ -1,0 +1,122 @@
+{
+  "name": "SameAPI - traffic for a few domains",
+  "nodes": [
+    {
+      "id": "c47fe634-767c-4bde-9a06-e21704d58357",
+      "name": "Start",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "aa131775-b44c-4440-a509-e558bfdf5307",
+      "name": "Domains",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        220,
+        0
+      ],
+      "parameters": {
+        "jsCode": "return ['example.com', 'github.com', 'wikipedia.org'].map((domain) => ({ json: { domain } }));"
+      }
+    },
+    {
+      "id": "63002a62-ced7-4cc6-b049-f9fa6e7c0995",
+      "name": "Get Traffic",
+      "type": "n8n-nodes-sameapi.sameApi",
+      "typeVersion": 1,
+      "position": [
+        440,
+        0
+      ],
+      "parameters": {
+        "resource": "domain",
+        "operation": "getTraffic",
+        "domain": "={{ $json.domain }}",
+        "simplify": true
+      }
+    },
+    {
+      "id": "c8dd043a-6e77-4ec6-8c2c-d4ac2cc5c1b7",
+      "name": "Pick fields",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        660,
+        0
+      ],
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "a1",
+              "name": "domain",
+              "value": "={{ $json.domain }}",
+              "type": "string"
+            },
+            {
+              "id": "a2",
+              "name": "monthlyVisits",
+              "value": "={{ $json.visits.estimatedMonthlyVisits }}",
+              "type": "number"
+            },
+            {
+              "id": "a3",
+              "name": "globalRank",
+              "value": "={{ $json.ranks.global }}",
+              "type": "number"
+            },
+            {
+              "id": "a4",
+              "name": "aiVisits",
+              "value": "={{ $json.aiTraffic ? $json.aiTraffic.totalVisits : null }}",
+              "type": "number"
+            }
+          ]
+        },
+        "options": {}
+      }
+    }
+  ],
+  "connections": {
+    "Start": {
+      "main": [
+        [
+          {
+            "node": "Domains",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Domains": {
+      "main": [
+        [
+          {
+            "node": "Get Traffic",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Traffic": {
+      "main": [
+        [
+          {
+            "node": "Pick fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {}
+}
