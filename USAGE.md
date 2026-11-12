@@ -10,8 +10,6 @@ A step-by-step guide for end users. You need a SameAPI account on a **Pro plan o
 4. Tick the box that accepts the risk of installing community code, then click **Install**.
 5. When it finishes, search for **SameAPI** in the nodes panel. You should see two nodes: **SameAPI** and **SameAPI Trigger**.
 
-> This node is **not verified by n8n**. n8n's documentation says verified community nodes can be installed from the nodes panel on every deployment type (self-hosted and n8n Cloud); for a node that is not verified, install it on a self-hosted n8n.
-
 If **Community Nodes** is missing, your administrator may have disabled it (environment variable `N8N_COMMUNITY_PACKAGES_ENABLED`).
 
 ## 2. Create the credential
