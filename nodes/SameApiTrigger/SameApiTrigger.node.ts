@@ -37,20 +37,13 @@ export class SameApiTrigger implements INodeType {
 		],
 		properties: [
 			{
-				displayName:
-					'Copy this node\'s Production URL into "Webhook URL" of Batch → Look Up Domains (Options), and type the same secret in "Webhook Secret". SameAPI only calls public https:// addresses.',
-				name: 'setupNotice',
-				type: 'notice',
-				default: '',
-			},
-			{
 				displayName: 'Webhook Secret',
 				name: 'webhookSecret',
 				type: 'string',
 				typeOptions: { password: true },
 				default: '',
 				description:
-					'The secret you gave SameAPI with the batch. When set, deliveries with a wrong or missing signature are refused. Leave empty only for testing.',
+					'Type the same secret as in "Webhook Secret" of Batch → Look Up Domains (Options), where this node\'s Production URL goes in "Webhook URL". When set, deliveries with a wrong or missing signature are refused. Leave empty only for testing.',
 			},
 			{
 				displayName: 'Events',

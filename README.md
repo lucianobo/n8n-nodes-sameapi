@@ -2,8 +2,6 @@
 
 This is an n8n community node for [SameAPI](https://sameapi.io/?utm_source=n8n), an API that estimates the traffic of any website. Look up a domain inside a workflow and get its estimated monthly visits, global, country and category rankings, traffic sources, top countries and visits from AI assistants, without handling asynchronous jobs yourself.
 
-> **Status:** this node has **not** been verified by n8n. See [PUBLISH.md](PUBLISH.md) for the publishing steps.
-
 [n8n](https://n8n.io/) is a [fair-code licensed](https://docs.n8n.io/sustainable-use-license/) workflow automation platform.
 
 - [Installation](#installation)
@@ -40,10 +38,10 @@ n8n tests the credential with `GET /usage`. If the plan has no API access you wi
 | Domain | **Get Traffic** | Looks up one domain, waits for SameAPI to finish, and returns the data. Use it for a few domains. |
 | Batch | **Look Up Domains** | Looks up a list of domains in one job. The size is limited by your plan, not by the node: a list above 10,000 domains is uploaded in several calls of up to 10,000 and stays one job. Wait for the results, or get the job ID right away (optionally with a webhook). |
 | Job | **Get** | Returns the status and progress of a job. |
-| Job | **Get Results** | Returns the results of a job, with **Return All** or a **Limit**. |
+| Job | **Get Results** | Returns the results of a job, with **Return All** or a **Limit**. Results can be read while the job is still running, but their order is only stable once it is completed: check the status first with **Job → Get**. |
 | Account | **Get Usage** | Returns your plan, monthly quota and rate limits. |
 
-**Get Traffic** makes one lookup per input item, one after the other (a few seconds each). With more than 50 input items it stops and asks you to use **Batch → Look Up Domains** instead (you can turn that check off in Options).
+**Get Traffic** makes one lookup per input item, one after the other (a few seconds each), so for long lists use **Batch → Look Up Domains**. With more than 50 input items it stops and says so (you can turn that check off in Options).
 
 **Batch → Look Up Domains** reads one domain from each input item, or from a pasted list. Domains are cleaned (`https://www.Example.com/page` becomes `example.com`), checked, and de-duplicated. Invalid entries stop the run with a clear message, or are skipped if you turn on **Skip Invalid Domains**.
 
@@ -51,7 +49,7 @@ Both lookup operations have **Polling Interval** and **Timeout** options. If the
 
 ### SameAPI Trigger node
 
-Starts a workflow when a batch job finishes or fails. Put the node's **Production URL** in the **Webhook URL** option of **Batch → Look Up Domains**, and the same secret in **Webhook Secret**. The node checks SameAPI's signature (`X-Webhook-Signature`) and refuses old or forged deliveries with HTTP 401.
+Starts a workflow when a batch job finishes or fails. To set it up, open the Trigger node, copy its **Production URL** (shown above the parameters) and paste it in **Batch → Look Up Domains → Options → Webhook URL**. Type the same secret in **Webhook Secret** on both nodes. Activate the workflow that holds the Trigger, otherwise the Production URL does not answer. The node checks SameAPI's signature (`X-Webhook-Signature`) and refuses old or forged deliveries with HTTP 401.
 
 SameAPI only calls public `https://` addresses, so a local n8n on `localhost` cannot receive webhooks. SameAPI sends two events: `job.completed` (the job finished; some domains may still have failed, see `failedDomains`) and `job.failed` (the job could not be processed at all). By default the Trigger starts the workflow only for `job.completed`. In the **Events** field you can add **Job Failed**, so you can warn someone instead of waiting forever. The output has an `event` field you can branch on, see [`examples/06-webhook-receiver-with-failed-job.json`](examples/06-webhook-receiver-with-failed-job.json). Deliveries for events you did not choose are answered with `200` and ignored.
 

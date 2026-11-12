@@ -22,7 +22,8 @@ export const jobProperties: INodeProperties[] = [
 			{
 				name: 'Get Results',
 				value: 'getResults',
-				description: 'Get the domain data of a job, page by page',
+				description:
+					'Get the domain data of a job, page by page. While the job is running the order is not stable, so check the status first with Job → Get.',
 				action: 'Get job results',
 			},
 		],
@@ -37,14 +38,6 @@ export const jobProperties: INodeProperties[] = [
 		placeholder: 'e.g. 5dc22f15-a637-41ce-8a77-a629bc105b70',
 		displayOptions: { show: showAny },
 		description: 'The ID returned by Batch → Look Up Domains',
-	},
-	{
-		displayName:
-			'Results can be read while the job is still running, but their order is not stable until it is completed. Check the status first with Job → Get.',
-		name: 'runningNotice',
-		type: 'notice',
-		default: '',
-		displayOptions: { show: showResults },
 	},
 	{
 		displayName: 'Simplify',

@@ -1,6 +1,6 @@
 {
 	"name": "n8n-nodes-sameapi",
-	"version": "0.1.1",
+	"version": "0.1.2",
 	"description": "n8n community node for SameAPI: website traffic, rankings and AI-assistant visits for any domain.",
 	"license": "MIT",
 	"homepage": "https://sameapi.io/?utm_source=n8n",

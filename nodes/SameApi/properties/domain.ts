@@ -15,7 +15,8 @@ export const domainProperties: INodeProperties[] = [
 			{
 				name: 'Get Traffic',
 				value: 'getTraffic',
-				description: 'Look up the traffic of one domain and wait for the data',
+				description:
+					'Look up the traffic of one domain and wait for the data. Makes one lookup per input item; for long lists use Batch → Look Up Domains.',
 				action: 'Get domain traffic',
 			},
 		],
@@ -39,14 +40,6 @@ export const domainProperties: INodeProperties[] = [
 		default: true,
 		displayOptions: { show },
 		description: 'Whether to return a clean summary grouped by topic instead of the full SameAPI response',
-	},
-	{
-		displayName:
-			'This operation makes one lookup per input item, one after the other. For long lists use Batch → Look Up Domains instead.',
-		name: 'manyItemsNotice',
-		type: 'notice',
-		default: '',
-		displayOptions: { show },
 	},
 	{
 		displayName: 'Options',

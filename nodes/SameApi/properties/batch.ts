@@ -187,7 +187,7 @@ export const batchProperties: INodeProperties[] = [
 				default: '',
 				placeholder: 'e.g. https://example.com/webhook',
 				description:
-					'A public https:// address that SameAPI calls when the job ends. Local addresses (localhost) are refused by SameAPI.',
+					'A public https:// address that SameAPI calls when the job ends, for example the Production URL of a SameAPI Trigger node. Local addresses (localhost) are refused by SameAPI.',
 			},
 		],
 	},

@@ -87,11 +87,10 @@ Create a key in your SameAPI dashboard under API Keys. API access needs a Pro pl
 ### Resource: Domain
 
 **Operation: Get Traffic**
-- Description: Look up the traffic of one domain and wait for the data
+- Description: Look up the traffic of one domain and wait for the data. Makes one lookup per input item; for long lists use Batch → Look Up Domains.
 - Action: Get domain traffic
 - **Domain** (required): The domain to look up. A full URL also works: the protocol, path and "www." are removed for you. Placeholder: `e.g. example.com`
 - **Simplify**: Whether to return a clean summary grouped by topic instead of the full SameAPI response
-- Notice: This operation makes one lookup per input item, one after the other. For long lists use Batch → Look Up Domains instead.
 - Options:
   - **Allow More Than 50 Items**: Whether to allow more than 50 input items. Each item creates its own SameAPI job and takes a few seconds, so Batch is usually the better choice.
   - **Include Country List**: Whether to keep the long reference list of 252 countries in the full response. Only applies when Simplify is off; it adds about 16 KB per domain.
@@ -110,12 +109,12 @@ Create a key in your SameAPI dashboard under API Keys. API access needs a Pro pl
 - **Domain List**: Domains separated by commas, spaces or new lines. Duplicates are removed.
 - **Result**: *Wait for Results* (wait until the job is done, then return one item per domain) or *Return Job Immediately* (return the job ID at once; continue later with Get Results, or add a webhook in Options)
 - **Simplify**, **Return All**, **Limit**: as above (used when waiting)
-- Options: **Batch Name**, **Include Country List**, **Include Fields**, **Only Successful Results**, **Polling Interval (Seconds)**, **Remove "www."**, **Skip Invalid Domains**, **Timeout (Seconds)**, **Webhook Secret**, **Webhook URL** (a public https:// address that SameAPI calls when the job ends; local addresses are refused)
+- Options: **Batch Name**, **Include Country List**, **Include Fields**, **Only Successful Results**, **Polling Interval (Seconds)**, **Remove "www."**, **Skip Invalid Domains**, **Timeout (Seconds)**, **Webhook Secret**, **Webhook URL** (a public https:// address that SameAPI calls when the job ends, for example the Production URL of a SameAPI Trigger node; local addresses are refused)
 
 ### Resource: Job
 
 - **Get**: Get the status and progress of a job. Action: Get a job
-- **Get Results**: Get the domain data of a job, page by page. Action: Get job results. Notice: Results can be read while the job is still running, but their order is not stable until it is completed.
+- **Get Results**: Get the domain data of a job, page by page. While the job is running the order is not stable, so check the status first with Job → Get. Action: Get job results
 - **Job ID** (required): The ID returned by Batch → Look Up Domains
 
 ### Resource: Account
@@ -127,7 +126,7 @@ Create a key in your SameAPI dashboard under API Keys. API access needs a Pro pl
 ### SameAPI Trigger node
 
 - Description: Starts a workflow when a SameAPI batch job has finished or has failed
-- **Webhook Secret**: The secret you gave SameAPI with the batch. When set, deliveries with a wrong or missing signature are refused. Leave empty only for testing.
+- **Webhook Secret**: Type the same secret as in "Webhook Secret" of Batch → Look Up Domains (Options), where this node's Production URL goes in "Webhook URL". When set, deliveries with a wrong or missing signature are refused. Leave empty only for testing.
 - **Events**: Which SameAPI events start the workflow: Job Completed (default) or Job Failed. Other events are accepted and ignored. Leave empty to start on every event. The event name is in the output field "event".
 - **Signature Tolerance (Seconds)**: How old a delivery can be before it is refused as a possible replay. Only used when a secret is set.
 

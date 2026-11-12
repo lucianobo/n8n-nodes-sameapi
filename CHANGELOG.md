@@ -1,3 +1,10 @@
+## 0.1.2
+
+Changes asked for by the n8n review. No change in behaviour.
+
+- Removed the notices from the node forms. Their wording is now in the descriptions of **Domain → Get Traffic**, **Job → Get Results**, the Trigger's **Webhook Secret** and the batch **Webhook URL** option, and in the README.
+- README: removed the publishing status line and the link to the publishing notes. The maintainer publishing notes are no longer in the repository.
+
 ## 0.1.1
 
 No code changes. First release published with npm trusted publishing (no stored token).
